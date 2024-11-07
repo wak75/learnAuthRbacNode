@@ -35,7 +35,7 @@ const login = async (req, res) =>{
     try{
         const user  = await User.findOne({username})
         if(!user){
-            res
+            return res
                 .status(404)
                 .json({
                     message: `No user found: ${username}`
@@ -52,6 +52,7 @@ const login = async (req, res) =>{
                 user:{
 
                     id: user._id, 
+                    name:user.username,
                     role: user.role,
                 }
             }, 

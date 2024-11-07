@@ -6,7 +6,7 @@ const verify_token = (req, res, next) =>{
     let auth_header = req.headers.authorization || req.headers.Authrization
     if(auth_header && (auth_header.startsWith('Bearer') || auth_header.startsWith('bearer'))){
         token = auth_header.split(" ")[1]
-        console.log(token)
+        // console.log(token)
 
         if(!token){
             return res
@@ -16,9 +16,9 @@ const verify_token = (req, res, next) =>{
 
         try{
             const decoded_token = jwt.verify(token, process.env.JWT)
-            console.log('Decoded Token:', decoded_token)
+            // console.log('Decoded Token:', decoded_token)
             req.user = decoded_token.user
-            console.log('Set User:', req.user)
+            // console.log('Set User:', req.user)
             next()
         }catch(error){
             res.status(400).json({message: `Invalid token`})
@@ -26,7 +26,7 @@ const verify_token = (req, res, next) =>{
     }else{
         res
             .status(400)
-            .json({message: `Authorization fialed very very badly as bearer token is not found`})
+            .json({message: `Authorization failed, please login to view the page`})
     }
 
 }

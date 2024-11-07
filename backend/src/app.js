@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import  router  from "./routes/AuthRoutes.js"
 import dbConnect from './config/DBConnection.js'
 import user_router from './routes/UserRoutes.js'
+import page_route from './routes/PagesRoute.js'
 dotenv.config()
 const port = process.env.PORT || 6000
 const app = express()
@@ -13,7 +14,8 @@ dbConnect()
 
 
 app.use('/api/auth', router)
-app.use('/api/data/', user_router)
+app.use('/api/data', user_router)
+app.use('/user', page_route)
 
 
 app.listen(port,()=>{
