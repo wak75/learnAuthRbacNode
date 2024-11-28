@@ -6,13 +6,14 @@ import user_router from './routes/UserRoutes.js'
 import page_route from './routes/PagesRoute.js'
 import ImageRoute from './routes/ImageUploadRoutes.js'
 import galleryRoute from './routes/GalleryRoute.js'
+import connectToBlob from './config/AzureConnection.js'
 dotenv.config()
 const port = process.env.PORT || 6000
 const app = express()
 app.use(express.json())
 
 dbConnect()
-
+connectToBlob()
 
 app.use("/uploads", express.static('uploads'))
 

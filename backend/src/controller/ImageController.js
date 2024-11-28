@@ -2,20 +2,33 @@
 import Image from "../models/ImageModel.js"
 import User from "../models/UserModel.js"
 import fs  from 'fs'
+import {BlobServiceClient} from '@azure/storage-blob';
+
 
 const uploadImage = async (req ,res)=>{
     try{
 
+        const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.CONNECTION_STRING)
+        const containerClient = blobServiceClient.getContainerClient('images')
         console.log("!!!!!!!!!!!!!")
         
-        const imageUrl = `${req.protocol}://${req.get('host')}/${req.file.path}`
+        
         
         console.log('File:', req.file)
         console.log('User:', req.user)
 
+        const blobName = `${Date.now()}-${req.file.originalname}`
+        const blockBlobClient = containerClient.getBlockBlobClient(blobName)
+
+        await blockBlobClient.uploadData(req.file.buffer, {
+            blobHTTPHeaders: { blobContentType: req.file.mimetype }
+        })
+
+        const imageUrl = blockBlobClient.url
+
         const defaultStatus = 'private'
         const image = new Image({
-            filePath: req.file.path, 
+            filePath: blobName, 
             imageUrl:imageUrl,
             uploader:req.user.id,
             currentstauts: defaultStatus,
