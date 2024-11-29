@@ -9,7 +9,7 @@ const uploadImage = async (req ,res)=>{
     try{
 
         const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.CONNECTION_STRING)
-        const containerClient = blobServiceClient.getContainerClient('images')
+        const containerClient = blobServiceClient.getContainerClient(process.env.AZURE_CONTAINER_NAME)
         console.log("!!!!!!!!!!!!!")
         
         
@@ -152,13 +152,19 @@ const deleteImage = async (req, res) =>{
             });
         }
     
-        fs.unlinkSync(image.filePath, (error)=>{
-            if(err){
-                return res
-                            .status(500)
-                            .json({messaege: `Failed to delete the physical media ${error}`})
-            }
-        })
+        // fs.unlinkSync(image.filePath, (error)=>{
+        //     if(err){
+        //         return res
+        //                     .status(500)
+        //                     .json({messaege: `Failed to delete the physical media ${error}`})
+        //     }
+        // })
+
+        
+        const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.CONNECTION_STRING)
+        const containerClient = blobServiceClient.getContainerClient(process.env.AZURE_CONTAINER_NAME)
+        const blobClient = containerClient.getBlobClient(image.filePath)
+        await blobClient.delete()
         
         await Image.findByIdAndDelete(imageid);
 

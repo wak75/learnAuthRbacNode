@@ -4,7 +4,8 @@ const galleryRoute = express.Router()
 
 galleryRoute.get("/gallery",async (req, res)=>{
     try {
-            const fullImages = await Image.find().populate('uploader', 'username')
+            const fullImages = await Image.find({currentstauts:"public"}).populate('uploader', 'username')
+
             return res
                       .status(200)
                       .send(fullImages)

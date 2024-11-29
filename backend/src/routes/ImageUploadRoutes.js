@@ -4,6 +4,7 @@ import multer from 'multer'
 import { uploadImage, getUserImages,toggleVisibility, deleteImage} from '../controller/ImageController.js'
 import page_access from '../middleware/PageAccessMiddleware.js'
 import {BlobServiceClient} from '@azure/storage-blob';
+import handleMulterError from '../middleware/HandleMulterErrors.js'
 const ImageRoute = express.Router()
 
 
@@ -46,7 +47,7 @@ const upload = multer({
 
 
 
-ImageRoute.post("/:name/upload", verify_token,page_access,upload.single('image'),uploadImage)
+ImageRoute.post("/:name/upload", verify_token,page_access,upload.single('image'),handleMulterError,uploadImage)
 ImageRoute.get("/:name/allimages", verify_token,page_access, getUserImages)
 ImageRoute.post('/:name/:imageid/visibility',verify_token, toggleVisibility )
 ImageRoute.post("/:name/:imageid/delete",verify_token, deleteImage)

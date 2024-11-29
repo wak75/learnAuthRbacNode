@@ -13,7 +13,7 @@ const app = express()
 app.use(express.json())
 
 dbConnect()
-connectToBlob()
+// connectToBlob()
 
 app.use("/uploads", express.static('uploads'))
 
