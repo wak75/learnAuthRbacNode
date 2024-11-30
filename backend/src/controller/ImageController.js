@@ -9,7 +9,7 @@ const uploadImage = async (req ,res)=>{
     try{
 
         const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.CONNECTION_STRING)
-        const containerClient = blobServiceClient.getContainerClient(process.env.AZURE_CONTAINER_NAME)
+        const containerClient = blobServiceClient.getContainerClient(process.env.CONTAINER_NAME)
         console.log("!!!!!!!!!!!!!")
         
         
@@ -26,12 +26,12 @@ const uploadImage = async (req ,res)=>{
 
         const imageUrl = blockBlobClient.url
 
-        const defaultStatus = 'private'
+        
         const image = new Image({
             filePath: blobName, 
             imageUrl:imageUrl,
             uploader:req.user.id,
-            currentstauts: defaultStatus,
+            isPublic: false,
         })
         await image.save()
 
@@ -102,7 +102,7 @@ const toggleVisibility = async (req, res) => {
             });
         }
 
-        image.currentstauts = image.currentstauts === 'public' ? 'private' : 'public';
+        image.isPublic = image.isPublic === false ? true : false;
         await image.save();
 
         return res.status(200).json({

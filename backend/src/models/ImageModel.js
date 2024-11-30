@@ -14,10 +14,10 @@ const imageSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
-    currentstauts:{
-        type:String,
+    isPublic:{
+        type:Boolean,
         required: true,
-        enum:["public", "private"]
+        default: false
     },
     uploadTime:{
         type: Date,
